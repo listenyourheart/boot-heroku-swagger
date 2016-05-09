@@ -15,9 +15,7 @@
  */
 package com.github.britter.springbootherokudemo;
 
-import javax.validation.Valid;
-import java.util.List;
-
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,6 +23,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -38,6 +39,16 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    @ApiOperation(value = "getRecords", nickname = "get Records")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "model", value = "User's name", required = true, dataType = "string", paramType = "query", defaultValue="Niklas")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = String.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
     public String home(ModelMap model) {
         List<Record> records = repository.findAll();
         model.addAttribute("records", records);
